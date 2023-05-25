@@ -101,13 +101,13 @@ const Header = () => {
           </Div>
         </Slide>
       )}
-      {!showDropdownSearch && (
+      {/* {!showDropdownSearch && (
         <SearchGlobal
           sx={{
             maxWidth: { xs: 240, md: 320 },
           }}
         />
-      )}
+      )} */}
       <Stack
         direction="row"
         alignItems="center"

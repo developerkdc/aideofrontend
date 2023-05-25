@@ -10,6 +10,7 @@ import { TopicRounded } from "@mui/icons-material";
 import topicRoutes from "./topicRoutes";
 import contentRoutes from "./contentRoutes";
 import EditProfile from "app/pages/EditProfile";
+import ForgotPassword from "app/pages/ForgotPassword";
 
 
 /**
@@ -20,6 +21,10 @@ const routesForPublic = [
   {
     path: "/user/login",
     element: <Page component={Login} layout={"solo-page"} />,
+  },
+  {
+    path: "/password/reset/:token",
+    element: <Page component={ForgotPassword} layout={"solo-page"} />,
   },
   {
     middleware: [

@@ -239,7 +239,7 @@ const Menus = () => {
           icon: <CurrencyExchangeOutlinedIcon sx={{ fontSize: 20 }} />,
         },
         {
-          uri: "/verify/content",
+          uri: "/verify/contents",
           label: "Verify Content",
           type: "nav-item",
           icon: <ListAltOutlinedIcon sx={{ fontSize: 20 }} />,

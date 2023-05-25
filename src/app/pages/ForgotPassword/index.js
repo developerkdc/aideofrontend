@@ -18,7 +18,7 @@ import * as yup from "yup";
 import { Form, Formik } from "formik";
 import JumboTextField from "@jumbo/components/JumboFormik/JumboTextField";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useJumboAuth from "@jumbo/hooks/useJumboAuth";
 import ErrorAlert from "../extensions/sweetalert/components/ErrorAlert";
 import swal from "sweetalert2";
@@ -28,21 +28,22 @@ import SweetAlerts from "../extensions/sweetalert/SweetAlert";
 import Swal from "sweetalert2";
 import UserForm from "app/components/UserForm/UserForm";
 import { useJumboDialog } from "@jumbo/components/JumboDialog/hooks/useJumboDialog";
-import ForgotPassword from "../ForgotPassword";
 import ForgotPasswordForm from "app/components/ForgotPasswordForm/ForgotPasswordForm";
+import { resetPassword } from "app/services/apis/resetPassword";
 
 const validationSchema = yup.object({
-  email: yup
-    .string("Enter your email")
-    .email("Enter a valid email")
-    .required("Email is required"),
   password: yup.string("Enter your password").required("Password is required"),
+  confirmPassword: yup
+    .string("Enter your password")
+    .required("Password is required"),
 });
 
-const Login = ({ disableSmLogin }) => {
-  const { error, loading , isAuthenticated ,user} = useSelector((state) => state.userReducer);
+const ForgotPassword = ({ disableSmLogin }) => {
+  const { error, loading, isAuthenticated, user } = useSelector(
+    (state) => state.userReducer
+  );
   const { setAuthToken } = useJumboAuth();
-  const {showDialog, hideDialog} = useJumboDialog();
+  const { showDialog, hideDialog } = useJumboDialog();
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -56,24 +57,37 @@ const Login = ({ disableSmLogin }) => {
       });
       dispatch(clearErrors());
     }
-    if(isAuthenticated && user.role=="admin"){
-        navigate("/content")
+    if (isAuthenticated && user.role == "admin") {
+      navigate("/content");
+    } else if (isAuthenticated && user.role != "admin") {
+      navigate("/mycontent");
     }
-    else if(isAuthenticated && user.role!="admin"){
-      navigate("/mycontent")
-    }
-  }, [dispatch, error ,isAuthenticated]);
+  }, [dispatch, error, isAuthenticated]);
+  const { token } = useParams();
 
-  const onSignIn = (email, password) => {
-    dispatch(login(email, password));
+  const onReset = async (password, confirmPassword) => {
+    const item = {
+      password: password,
+      confirmPassword: confirmPassword,
+      token: token,
+    };
+    const data = await resetPassword(item);
+    if(data.status==200){
+      Swal.fire({
+        icon: "success",
+        title: "Password Reset Successfully",
+        text: "",
+      });
+      navigate('/mycontent')
+    }
   };
 
-  const handleForgotPassword = () =>{
+  const handleForgotPassword = () => {
     showDialog({
-      title: 'Enter Email For Recovery',
-      content: <ForgotPasswordForm hideDialogue={hideDialog}/>
-  });
-  }
+      title: "Enter Email For Recovery",
+      content: <ForgotPasswordForm hideDialogue={hideDialog} />,
+    });
+  };
 
   return (
     <Div
@@ -129,15 +143,7 @@ const Login = ({ disableSmLogin }) => {
                 fontWeight={500}
                 mb={3}
               >
-                Sign In
-              </Typography>
-              <Typography variant={"body1"} mb={2}>
-                By signing in, you can access the dashboard of Aedio.
-              </Typography>
-              <Typography variant={"body1"}>
-                <Link href={"#"} color={"inherit"} underline={"none"}>
-                  Forgot your password? Recover Now
-                </Link>
+                Reset Password
               </Typography>
             </Div>
 
@@ -152,33 +158,27 @@ const Login = ({ disableSmLogin }) => {
           <Formik
             validateOnChange={true}
             initialValues={{
-              email: "demo@example.com",
-              password: "ABC123DEF",
+              password: "",
+              confirmPassword: "",
             }}
             validationSchema={validationSchema}
             onSubmit={(data, { setSubmitting }) => {
               setSubmitting(true);
-              onSignIn(data.email, data.password);
+              onReset(data.password, data.confirmPassword);
               setSubmitting(false);
             }}
           >
             {({ isSubmitting }) => (
               <Form style={{ textAlign: "left" }} noValidate autoComplete="off">
                 <Div sx={{ mt: 1, mb: 3 }}>
-                  <JumboTextField fullWidth name="email" label="Email" />
+                  <JumboTextField fullWidth name="password" label="Password" />
                 </Div>
                 <Div sx={{ mt: 1, mb: 2 }}>
                   <JumboTextField
                     fullWidth
-                    name="password"
-                    label="Password"
+                    name="confirmPassword"
+                    label="Confirm Password"
                     type="password"
-                  />
-                </Div>
-                <Div sx={{ mb: 2 }}>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Remember me"
                   />
                 </Div>
                 <LoadingButton
@@ -189,64 +189,9 @@ const Login = ({ disableSmLogin }) => {
                   sx={{ mb: 3 }}
                   loading={isSubmitting}
                 >
-                  Sign In
+                  Reset Password
                 </LoadingButton>
-                {!disableSmLogin && (
-                  <React.Fragment>
-                    <Typography variant={"body1"} mb={2} sx={{"&:hover":{cursor:"pointer"},width:"40%"}} onClick={handleForgotPassword}>
-                      Forgot Password
-                    </Typography>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      mb={1}
-                    >
-                      <IconButton
-                        sx={{
-                          bgcolor: "#385196",
-                          color: "common.white",
-                          p: (theme) => theme.spacing(1.25),
-
-                          "&:hover": {
-                            backgroundColor: "#385196",
-                          },
-                        }}
-                        aria-label="Facebook"
-                      >
-                        <Facebook fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        sx={{
-                          bgcolor: "#00a8ff",
-                          color: "common.white",
-                          p: (theme) => theme.spacing(1.25),
-
-                          "&:hover": {
-                            backgroundColor: "#00a8ff",
-                          },
-                        }}
-                        aria-label="Twitter"
-                      >
-                        <Twitter fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        sx={{
-                          bgcolor: "#23272b",
-                          color: "common.white",
-                          p: (theme) => theme.spacing(1.25),
-
-                          "&:hover": {
-                            backgroundColor: "#23272b",
-                          },
-                        }}
-                        aria-label="Twitter"
-                      >
-                        <Google fontSize="small" />
-                      </IconButton>
-                    </Stack>
-                  </React.Fragment>
-                )}
+                {!disableSmLogin && <React.Fragment></React.Fragment>}
               </Form>
             )}
           </Formik>
@@ -256,4 +201,4 @@ const Login = ({ disableSmLogin }) => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
