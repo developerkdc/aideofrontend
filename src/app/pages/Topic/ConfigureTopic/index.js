@@ -18,6 +18,7 @@ import {
   getContentByTopic,
 } from "app/redux/actions/contentAction";
 import { getAllTags } from "app/redux/actions/tagAction";
+import { configTopicType } from "app/services/apis/configTopicType";
 import { configureTopic } from "app/services/apis/configureTopic";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,13 +34,19 @@ export default function ConfigureTopic() {
     (state) => state.contentReducer
   );
   const { topic } = location.state;
+  const tags = topic.tags.map((item) => {
+    return item._id;
+  });
 
+  const [type, SetType] = useState(topic?.configType);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
   const [formData, setFormData] = useState({
     tags: [],
+    savedTags: topic?.tags?.map((tag) => tag) || [], // Include savedTags property
   });
-  
+
   const [selectedItems, setSelectedItems] = useState([]);
   // console.log(selectedItems);
   let data = [];
@@ -67,7 +74,7 @@ export default function ConfigureTopic() {
 
     if (checked) {
       // Check the maximum number of selected items (10)
-      if (selectedItems.length < 10) {
+      if (selectedItems.length < 15) {
         setSelectedItems((prevItems) => [...prevItems, itemId]);
       } else {
         // Show an error or perform the desired action when the maximum is reached
@@ -90,8 +97,7 @@ export default function ConfigureTopic() {
   useEffect(() => {
     const preSelected = topicContent?.map((item) => item._id) || [];
     setSelectedItems(preSelected);
-  }, [topicContent]);  
-  
+  }, [topicContent]);
 
   useEffect(() => {
     tagIds = formData?.tags.map((item) => {
@@ -105,109 +111,225 @@ export default function ConfigureTopic() {
   }, [formData]);
 
   const addContent = async () => {
-    tagIds = formData?.tags.map((item) => {
-      return item._id;
-    });
+    let tagIds = [];
+    if (formData.savedTags.length > 0) {
+      tagIds = formData.savedTags.map((item) => item._id);
+    }
     const body = {
       contentIds: selectedItems,
       tagIds: tagIds,
       topicId: topic._id,
     };
     const data = await configureTopic(body);
-    dispatch(getContentByTopic(topic._id))
+    dispatch(getContentByTopic(topic._id));
     Swal.fire({
       icon: "success",
       title: "Topic Updated Successfully",
-      // text: "Done",
     });
-    setFormData({ tags: [] });
+    setFormData({ ...formData, tags: [] }); // Clear both tags and savedTags
   };
 
+  const handleConfigType = async (item) => {
+    const data = await configTopicType(item, topic._id);
+    SetType(data.data.configType);
+  };
   return (
     <Div>
       <Box
         sx={{ display: "flex", justifyContent: "space-between" }}
         width={250}
       >
-        <Button variant="contained" color="secondary">
+        <Button
+          variant={type === "auto" ? "contained" : "outlined"}
+          color="secondary"
+          onClick={() => handleConfigType("auto")}
+        >
           Auto Select
         </Button>
-        <Button variant="contained" color="warning">
+        <Button
+          variant={type === "manual" ? "contained" : "outlined"}
+          color="warning"
+          onClick={() => handleConfigType("manual")}
+        >
           Manual
         </Button>
       </Box>
-      <Card sx={{ mt: 4 }}>
-        <Stack spacing={2} p={2}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="h2">
-             {topic.name} <span>({selectedItems.length}/10 selected)</span>
-            </Typography>
-            <Button
-              sx={{ minWidth: 92 }}
-              disableElevation
-              variant={"contained"}
-              size={"small"}
-              color={"success"}
-              disabled={selectedItems.length < 1}
-              onClick={addContent}
+      {type == "manual" ? (
+        <Card sx={{ mt: 4 }}>
+          <Stack spacing={2} p={2}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              Add / Update
-            </Button>
-          </Box>
+              <Typography variant="h2">
+                {topic.name} <span>({selectedItems.length}/15 selected)</span>
+              </Typography>
+              <Button
+                sx={{ minWidth: 92 }}
+                disableElevation
+                variant={"contained"}
+                size={"small"}
+                color={"success"}
+                disabled={selectedItems.length < 1}
+                onClick={addContent}
+              >
+                Add / Update
+              </Button>
+            </Box>
 
-          <FormControl>
-            <Div sx={{ width: 500, maxWidth: "100%" }}>
-              <Autocomplete
-                multiple
-                id="tags-standard"
-                options={alltags}
-                getOptionLabel={(option) => option.name}
-                value={formData.tags}
-                onChange={(event, value) => {
-                  setFormData({ ...formData, tags: value });
+            <FormControl>
+              <Div
+                sx={{
+                  width: "800",
+                  display: "flex",
+                  alignItems: "center",
                 }}
-                renderOption={(props, option) => (
-                  <Box
-                    component="li"
-                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                    {...props}
-                  >
-                    {option.name}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Choose Tags"
-                    placeholder="Tags"
-                  />
-                )}
+              >
+                <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                  Saved Tags
+                </Typography>
+                <Autocomplete
+                  sx={{ width: "20%", ml: 2 }}
+                  multiple
+                  id="tags-standard"
+                  options={alltags}
+                  getOptionLabel={(option) => option.name}
+                  value={formData.savedTags} // Use formData.savedTags instead of formData.tags
+                  onChange={(event, value) => {
+                    setFormData({ ...formData, savedTags: value }); // Update savedTags property
+                  }}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      {option.name}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      label="Tags To Save For Topic"
+                      placeholder="Tags"
+                    />
+                  )}
+                />
+
+                <Typography variant="subtitle1" sx={{ mt: 2, ml: 10 }}>
+                  Filter Aideos
+                </Typography>
+                <Autocomplete
+                  sx={{ width: "20%", ml: 2 }}
+                  multiple
+                  id="tags-standard"
+                  options={alltags}
+                  getOptionLabel={(option) => option.name}
+                  value={formData.tags}
+                  onChange={(event, value) => {
+                    setFormData({ ...formData, tags: value });
+                  }}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      {option.name}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      label="Filter Aideos"
+                      placeholder="Tags"
+                    />
+                  )}
+                />
+              </Div>
+            </FormControl>
+            {currentItems?.map((item) => (
+              <ContentItem
+                key={item?._id}
+                item={item}
+                selected={selectedItems?.includes(item?._id)}
+                onCheckboxChange={handleCheckboxChange}
               />
-            </Div>
-          </FormControl>
-          {currentItems?.map((item) => (
-            <ContentItem
-              key={item?._id}
-              item={item}
-              selected={selectedItems?.includes(item?._id)}
-              onCheckboxChange={handleCheckboxChange}
-            />
-          ))}
-        </Stack>
-        <Pagination
-          sx={{ paddingBottom: 1 }}
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
-        />
-      </Card>
+            ))}
+          </Stack>
+          <Pagination
+            sx={{ paddingBottom: 1 }}
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+          />
+        </Card>
+      ) : (
+        <Card sx={{ mt: 4 }}>
+          <Stack spacing={2} p={2}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="h2">
+                {topic.name} <span>(Auto Select)</span>
+              </Typography>
+              <Button
+                sx={{ minWidth: 92 }}
+                disableElevation
+                variant={"contained"}
+                size={"small"}
+                color={"success"}
+                disabled={selectedItems.length < 1}
+                onClick={addContent}
+              >
+                Add / Update
+              </Button>
+            </Box>
+
+            <FormControl>
+              <Div sx={{ width: 500, maxWidth: "100%" }}>
+              <Autocomplete
+                  sx={{ width: "80%", ml: 2 }}
+                  multiple
+                  id="tags-standard"
+                  options={alltags}
+                  getOptionLabel={(option) => option.name}
+                  value={formData.savedTags} // Use formData.savedTags instead of formData.tags
+                  onChange={(event, value) => {
+                    setFormData({ ...formData, savedTags: value }); // Update savedTags property
+                  }}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      {option.name}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      label="Tags To Save For Topic"
+                      placeholder="Tags"
+                    />
+                  )}
+                />
+              </Div>
+            </FormControl>
+          </Stack>
+        </Card>
+      )}
     </Div>
   );
 }

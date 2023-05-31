@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 import Step2Form from "../Step2Form";
+import Swal from "sweetalert2";
 
 const Step1Form = ({ setValue }) => {
   const [zipFiles, setZipFiles] = useState([]);
@@ -39,23 +40,22 @@ const Step1Form = ({ setValue }) => {
     ageRating: "",
   });
 
-
   const uploadFile = async () => {
     const formData = new FormData();
     formData.append("zipFile", zipFiles[0]); // Assuming you have only one zip file
     formData.append("imageFile", thumbnailFiles[0]); // Assuming you have only one image file
-  
+
     try {
       const response = await fetch("/api/v1/content/upload", {
         method: "POST",
         body: formData,
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log("File paths:", data);
-        localStorage.setItem("thumbnail",data.imageFilePath)
-        localStorage.setItem("zip",data.zipFilePath)
+        localStorage.setItem("thumbnail", data.imageFilePath);
+        localStorage.setItem("zip", data.zipFilePath);
         // Handle the file paths in your frontend logic
       } else {
         console.error("Upload failed:", response.statusText);
@@ -66,8 +66,6 @@ const Step1Form = ({ setValue }) => {
       // Handle the error in your frontend logic
     }
   };
-
-
 
   const handleNext = () => {
     // Create a new FormData object
@@ -86,15 +84,37 @@ const Step1Form = ({ setValue }) => {
       console.log(pair[0] + ", " + pair[1]);
     }
     // console.log(formData)
-    if (formData.title && formData.callToAction) {
+    if (formData.title && zipFiles.length > 0) {
       // Render Step2Form and pass the form data as props
-      setValue("step2");
-      localStorage.setItem("formData", JSON.stringify(formData));
-      localStorage.setItem("zip", zipFiles);
-      localStorage.setItem("thumbnail", thumbnailFiles);
-      uploadFile()
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Move to Step 2",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.value) {
+          setValue("step2");
+          localStorage.setItem("formData", JSON.stringify(formData));
+          localStorage.setItem("zip", zipFiles);
+          localStorage.setItem("thumbnail", thumbnailFiles);
+          uploadFile();
+          Swal.fire("Details Added", "Step 1 Completed", "success");
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          Swal.fire("Cancelled", "Keep Editing", "error");
+        }
+      });
     } else {
-      console.log("Fill all the fields");
+      Swal.fire({
+        icon: "error",
+        title: "Fill Title & Upload Zip",
+        text: "",
+      });
     }
   };
 
@@ -108,6 +128,7 @@ const Step1Form = ({ setValue }) => {
       onDrop: (acceptedFiles) => {
         setZipFiles(acceptedFiles);
       },
+      accept: ".zip",
     });
 
   const {
@@ -117,6 +138,7 @@ const Step1Form = ({ setValue }) => {
     onDrop: (acceptedFiles) => {
       setThumbnailFiles(acceptedFiles);
     },
+    accept: "image/*",
   });
 
   const zipFileItems = zipFiles.map((file) => (
@@ -158,6 +180,7 @@ const Step1Form = ({ setValue }) => {
             <TextField
               fullWidth
               id="title"
+              required
               label="Title"
               value={formData.title}
               onChange={(e) =>
@@ -168,6 +191,7 @@ const Step1Form = ({ setValue }) => {
           <FormControl>
             <TextField
               fullWidth
+              required
               id="callToAction"
               label="Call To Action"
               value={formData.callToAction}
@@ -192,7 +216,9 @@ const Step1Form = ({ setValue }) => {
                     component="li"
                     sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
                     {...props}
-                  >{option.name}</Box>
+                  >
+                    {option.name}
+                  </Box>
                 )}
                 renderInput={(params) => (
                   <TextField
@@ -213,10 +239,10 @@ const Step1Form = ({ setValue }) => {
                 options={alllanguages}
                 getOptionLabel={(option) => option.name}
                 value={formData.language}
-                onChange={(event, value) =>
-                  {console.log(value.name)
-                  setFormData({ ...formData, language: value })}
-                }
+                onChange={(event, value) => {
+                  console.log(value.name);
+                  setFormData({ ...formData, language: value });
+                }}
                 limitTags={1}
                 renderOption={(props, option) => (
                   <Box

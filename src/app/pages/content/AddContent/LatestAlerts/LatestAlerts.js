@@ -31,14 +31,14 @@ const LatestAlerts = ({ scrollHeight }) => {
   return (
     <JumboCardQuick
       noWrapper
-      title={"Add Aedio"}
+      title={"Add Aideo"}
       sx={{ width: "70%" }}
     // action={<Chip size={"small"} label={"2 New"} color={"secondary"}/>}
     >
       <TabContext value={value}>
         <TabList
           sx={{ borderBottom: 1, borderColor: "divider" }}
-          onChange={(event, newValue) => setValue(newValue)}
+          // onChange={(event, newValue) => setValue(newValue)}
         >
           <Tab label={"Step 1"} value={"step1"} sx={{ flex: "1 1 auto" }} />
           <Tab label={"Step 2"} value={"step2"} sx={{ flex: "1 1 auto" }} />

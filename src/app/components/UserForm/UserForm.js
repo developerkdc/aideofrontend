@@ -94,15 +94,16 @@ const UserForm = ({user, onSave}) => {
                             '& .MuiTextField-root': {
                                 mb: 3
                             },
-                            padding:5
+                            padding:5,
+                            width:"100%"
                         }}
                     >
-                        <JumboAvatarField
+                        {/* <JumboAvatarField
                             name={"profile_pic"}
                             alt={"user profile pic"}
                             onFileSelection={(file) => setFieldValue("profile_pic", file)}
                             sx={{width: 60, height: 60, margin: '0 auto 24px'}}
-                        />
+                        /> */}
                         <JumboTextField fullWidth size="small" variant="outlined" name="name" label="Name"/>
                         <JumboTextField fullWidth size="small" variant="outlined" name="email" label="Email"/>
                         {/* {!user ? <JumboTextField fullWidth size="small" variant="outlined" name="password" label="Password"/>: null} */}

@@ -12,7 +12,7 @@ export default function AddUser() {
       </Typography>
       <Div
         sx={{
-          width: 720,
+          width: 500,
           maxWidth: "100%",
           margin: "auto",
           p: 4,

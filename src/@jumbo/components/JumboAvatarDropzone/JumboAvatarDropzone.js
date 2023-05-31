@@ -15,7 +15,7 @@ const JumboAvatarDropzone = ({src, alt, onFileSelection, sx}) => {
     return (
         <div {...getRootProps({className: 'dropzone pointer'})} >
             <input {...getInputProps()} />
-            <Avatar alt={alt} src={src} sx={sx}/>
+            <Avatar alt={alt} src={src} sx={{ objectFit: "contain", ...sx }}/>
         </div>
     );
 };

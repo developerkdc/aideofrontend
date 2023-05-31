@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Autocomplete,
   Box,
   Button,
   CardContent,
   FormControl,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import Div from "@jumbo/shared/Div/Div";
+import axios from "axios";
 
 const Step2Form = ({ setValue }) => {
   const [storyboxCount, setStoryboxCount] = useState(1); // Initial number of textboxes
@@ -25,6 +28,18 @@ const Step2Form = ({ setValue }) => {
   const [finalAudioData, setFinalAudioData] = useState();
   const [finalVisualData, setFinalVisualData] = useState();
   const [finalCompleteData, setFinalCompleteData] = useState();
+  const [credits, setCredits] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/v1/content/getCredits/")
+      .then((response) => {
+        setCredits(response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+      });
+  }, []);
 
   const handleStoryTextbox = () => {
     setStoryboxCount((prevCount) => prevCount + 2); // Increment the textbox count by 2
@@ -96,7 +111,10 @@ const Step2Form = ({ setValue }) => {
   const handleCompleteInputChange = (index, field, value) => {
     setCompleteData((prevData) => {
       const updatedData = [...prevData];
+      // if(diff=="fromselection"){
       updatedData[index] = { ...updatedData[index], [field]: value };
+
+      // }
 
       const transformedArray = updatedData.map((obj) => {
         const key = obj.textbox1;
@@ -124,7 +142,7 @@ const Step2Form = ({ setValue }) => {
           }}
         >
           <FormControl>
-            <TextField
+            {/* <TextField
               fullWidth
               label="Textbox 
               1"
@@ -132,12 +150,51 @@ const Step2Form = ({ setValue }) => {
               onChange={(e) =>
                 handleStoryInputChange(index, "textbox1", e.target.value)
               }
+            /> */}
+            <Autocomplete
+              freeSolo
+              multiple={false}
+              id="story"
+              options={credits}
+              getOptionLabel={(option) => option.name}
+              value={storyData[index]?.textbox1}
+              onChange={(event, selectedOption) =>
+                handleStoryInputChange(
+                  index,
+                  "textbox1",
+                  selectedOption?.name || ""
+                )
+              }
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                  {...props}
+                >
+                  {option.name}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Story Creditor"
+                  placeholder="Name"
+                  onChange={(event) =>
+                    handleStoryInputChange(
+                      index,
+                      "textbox1",
+                      event.target.value || ""
+                    )
+                  }
+                />
+              )}
             />
           </FormControl>
           <FormControl sx={{ ml: 2 }}>
             <TextField
               fullWidth
-              label="Textbox 2"
+              label="Name"
               value={storyData[index]?.textbox2}
               onChange={(e) =>
                 handleStoryInputChange(index, "textbox2", e.target.value)
@@ -174,7 +231,7 @@ const Step2Form = ({ setValue }) => {
           }}
         >
           <FormControl>
-            <TextField
+            {/* <TextField
               fullWidth
               label="Textbox 
               1"
@@ -182,12 +239,51 @@ const Step2Form = ({ setValue }) => {
               onChange={(e) =>
                 handleAudioInputChange(index, "textbox1", e.target.value)
               }
+            /> */}
+            <Autocomplete
+              freeSolo
+              multiple={false}
+              id="audio"
+              options={credits}
+              getOptionLabel={(option) => option.name}
+              value={audioData[index]?.textbox1}
+              onChange={(event, selectedOption) =>
+                handleAudioInputChange(
+                  index,
+                  "textbox1",
+                  selectedOption?.name || ""
+                )
+              }
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                  {...props}
+                >
+                  {option.name}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Audio Creditor"
+                  placeholder="Name"
+                  onChange={(event) =>
+                    handleAudioInputChange(
+                      index,
+                      "textbox1",
+                      event.target.value || ""
+                    )
+                  }
+                />
+              )}
             />
           </FormControl>
           <FormControl sx={{ ml: 2 }}>
             <TextField
               fullWidth
-              label="Textbox 2"
+              label="Name"
               value={audioData[index]?.textbox2}
               onChange={(e) =>
                 handleAudioInputChange(index, "textbox2", e.target.value)
@@ -224,7 +320,7 @@ const Step2Form = ({ setValue }) => {
           }}
         >
           <FormControl>
-            <TextField
+            {/* <TextField
               fullWidth
               label="Textbox 
               1"
@@ -232,12 +328,51 @@ const Step2Form = ({ setValue }) => {
               onChange={(e) =>
                 handleVisualInputChange(index, "textbox1", e.target.value)
               }
+            /> */}
+            <Autocomplete
+              freeSolo
+              multiple={false}
+              id="visual"
+              options={credits}
+              getOptionLabel={(option) => option.name}
+              value={visualData[index]?.textbox1}
+              onChange={(event, selectedOption) =>
+                handleVisualInputChange(
+                  index,
+                  "textbox1",
+                  selectedOption?.name || ""
+                )
+              }
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                  {...props}
+                >
+                  {option.name}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Visual Creditor"
+                  placeholder="Name"
+                  onChange={(event) =>
+                    handleVisualInputChange(
+                      index,
+                      "textbox1",
+                      event.target.value || ""
+                    )
+                  }
+                />
+              )}
             />
           </FormControl>
           <FormControl sx={{ ml: 2 }}>
             <TextField
               fullWidth
-              label="Textbox 2"
+              label="Name"
               value={visualData[index]?.textbox2}
               onChange={(e) =>
                 handleVisualInputChange(index, "textbox2", e.target.value)
@@ -274,7 +409,7 @@ const Step2Form = ({ setValue }) => {
           }}
         >
           <FormControl>
-            <TextField
+            {/* <TextField
               fullWidth
               label="Textbox 
               1"
@@ -282,12 +417,51 @@ const Step2Form = ({ setValue }) => {
               onChange={(e) =>
                 handleCompleteInputChange(index, "textbox1", e.target.value)
               }
+            /> */}
+            <Autocomplete
+              freeSolo
+              multiple={false}
+              id="complete"
+              options={credits}
+              getOptionLabel={(option) => option.name}
+              value={completeData[index]?.textbox1}
+              onChange={(event, selectedOption) =>
+                handleCompleteInputChange(
+                  index,
+                  "textbox1",
+                  selectedOption?.name || ""
+                )
+              }
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                  {...props}
+                >
+                  {option.name}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Complete Creditor"
+                  placeholder="Name"
+                  onChange={(event) =>
+                    handleCompleteInputChange(
+                      index,
+                      "textbox1",
+                      event.target.value || ""
+                    )
+                  }
+                />
+              )}
             />
           </FormControl>
           <FormControl sx={{ ml: 2 }}>
             <TextField
               fullWidth
-              label="Textbox 2"
+              label="Name"
               value={completeData[index]?.textbox2}
               onChange={(e) =>
                 handleCompleteInputChange(index, "textbox2", e.target.value)

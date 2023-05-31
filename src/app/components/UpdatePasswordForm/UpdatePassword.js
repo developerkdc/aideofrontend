@@ -60,7 +60,7 @@ const UpdatePasswordForm = ({ onSave }) => {
       Swal.fire({
         position: "center",
         icon: "error",
-        title: "Password & Confirm Password Doesnt Match",
+        title: "Invalid Credentials",
         showConfirmButton: false,
         timer: 1500,
       });

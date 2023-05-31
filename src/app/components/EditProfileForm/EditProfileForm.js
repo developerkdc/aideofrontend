@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as yup from "yup";
 import useSwalWrapper from "@jumbo/vendors/sweetalert2/hooks";
 import { Field, Form, Formik } from "formik";
@@ -27,7 +27,7 @@ const initialValues = {
   phone: "",
   role: "",
   email: "",
-  profile_pic: "",
+  thumbnail: "",
   password: "",
 };
 
@@ -42,7 +42,7 @@ const EditProfileForm = ({ user, onSave }) => {
     // console.log(data)
     let user_updated = await updateUserDetails(data);
     console.log(user_updated);
-    if (user_updated?.status == 200) {
+    if (user_updated?.success == true) {
       Swal.fire({
         position: "center",
         icon: "success",
@@ -52,6 +52,7 @@ const EditProfileForm = ({ user, onSave }) => {
       });
       onSave();
       dispatch(loadUser());
+      window.location.reload();
     }
     if (user_updated?.success == false) {
       Swal.fire({
@@ -67,10 +68,12 @@ const EditProfileForm = ({ user, onSave }) => {
 
   const handleResetPassword = () => {
     showDialog({
-      title: "Update Language Name",
+      title: "Update Password",
       content: <UpdatePasswordForm onSave={hideDialogAndRefreshContactsList} />,
     });
   };
+
+  useEffect(() => {}, [user?.thumbnail]);
   return (
     <Formik
       validateOnChange={true}
@@ -90,11 +93,25 @@ const EditProfileForm = ({ user, onSave }) => {
             }}
           >
             <JumboAvatarField
-              name={"profile_pic"}
+              name={"thumbnail"}
               alt={"user profile pic"}
-              onFileSelection={(file) => setFieldValue("profile_pic", file)}
-              sx={{ width: 60, height: 60, margin: "0 auto 24px" }}
+              onFileSelection={(file) => {
+                setFieldValue("thumbnail", file);
+              }}
+              src={`http://localhost:3001/${user?.thumbnail}`}
+              sx={{
+                width: 100,
+                height: 100,
+                margin: "0 auto 24px",
+                "& img": {
+                  objectFit: "contain",
+                },
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
             />
+
             <JumboTextField
               fullWidth
               size="small"

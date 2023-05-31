@@ -81,7 +81,8 @@ const Login = ({ disableSmLogin }) => {
         width: 720,
         maxWidth: "100%",
         margin: "auto",
-        p: 4,
+        marginRight:80
+        // p: 4,
       }}
     >
       <Card
@@ -132,7 +133,7 @@ const Login = ({ disableSmLogin }) => {
                 Sign In
               </Typography>
               <Typography variant={"body1"} mb={2}>
-                By signing in, you can access the dashboard of Aedio.
+                By signing in, you can access the dashboard of Aideo.
               </Typography>
               <Typography variant={"body1"}>
                 <Link href={"#"} color={"inherit"} underline={"none"}>
@@ -152,8 +153,8 @@ const Login = ({ disableSmLogin }) => {
           <Formik
             validateOnChange={true}
             initialValues={{
-              email: "demo@example.com",
-              password: "ABC123DEF",
+              email: "rehan@gmail.com",
+              password: "admin",
             }}
             validationSchema={validationSchema}
             onSubmit={(data, { setSubmitting }) => {
@@ -175,12 +176,12 @@ const Login = ({ disableSmLogin }) => {
                     type="password"
                   />
                 </Div>
-                <Div sx={{ mb: 2 }}>
+                {/* <Div sx={{ mb: 2 }}>
                   <FormControlLabel
                     control={<Checkbox />}
                     label="Remember me"
                   />
-                </Div>
+                </Div> */}
                 <LoadingButton
                   fullWidth
                   type="submit"

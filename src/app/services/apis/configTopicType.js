@@ -1,14 +1,13 @@
 import axios from "axios";
 
-export const configureTopic = async (topic) => {
+export const configTopicType = async (item,topicId) => {
   try {
+    // console.log(item)
     const topic_data = {
-      contentIds: topic.contentIds,
-      tagIds: topic.tagIds
+      configType: item,
     };
     const config = { headers: { "Content-Type": "application/json" } };
-    const data = await axios.patch(`/api/v1/topic/addContent/${topic.topicId}`, topic_data, config);
-    // console.log(data)
+    const data = await axios.patch(`/api/v1/topic/config/${topicId}`, topic_data, config);
     return data;
   } catch (error) {
     // console.log(data)

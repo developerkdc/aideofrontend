@@ -41,9 +41,6 @@ const LAYOUTS = [
         label: "Solo Page",
         component: SoloPage,
         layoutOptions: {
-            sidebar: {
-                hide: true,
-            },
             header: {
                 hide: true,
             },
