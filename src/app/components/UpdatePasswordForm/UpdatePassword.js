@@ -44,7 +44,7 @@ const UpdatePasswordForm = ({ onSave }) => {
     // console.log(data)
     const userId = user._id;
     let user_updated = await updatePassword(data, userId);
-    console.log(user_updated);
+    // console.log(user_updated);
     if (user_updated?.status == 200) {
       Swal.fire({
         position: "center",

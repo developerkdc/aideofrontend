@@ -22,7 +22,7 @@ import {useJumboDialog} from "@jumbo/components/JumboDialog/hooks/useJumboDialog
 import useJumboTheme from "@jumbo/hooks/useJumboTheme";
 
 const MailItem = ({mailItem}) => {
-    console.log("rehan")
+    // console.log("rehan")
     const {theme} = useJumboTheme();
     const {setMailsListRefresh} = useMailsApp();
     const {hideDialog, showDialog} = useJumboDialog();

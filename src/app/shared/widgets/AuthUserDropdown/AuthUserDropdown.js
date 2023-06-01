@@ -30,7 +30,7 @@ const AuthUserDropdown = () => {
   const { user } = useSelector((state) => state.userReducer);
   // console.log(user);
   const onLogout = () => {
-    sessionStorage.setItem("isAuthenticated",false);
+    sessionStorage.setItem("isAuthenticated", false);
     navigate("/user/login");
     dispatch(logOut());
   };
@@ -41,9 +41,11 @@ const AuthUserDropdown = () => {
       <JumboDdPopover
         triggerButton={
           <Avatar
-            src={authUser.profile_pic}
+            src={`https://aideo-backend.onrender.com/${user?.thumbnail}`}
             sizes={"small"}
-            sx={{ boxShadow: 25, cursor: "pointer" }}
+            sx={{ boxShadow: 25, cursor: "pointer" ,"& img": {
+              objectFit: "contain",
+            },}}
           />
         }
       >
@@ -56,9 +58,16 @@ const AuthUserDropdown = () => {
           }}
         >
           <Avatar
-            src={authUser.profile_pic}
+            src={`https://aideo-backend.onrender.com/${user?.thumbnail}`}
             alt={user?.name}
-            sx={{ width: 60, height: 60, mb: 2 }}
+            sx={{
+              width: 60,
+              height: 60,
+              mb: 2,
+              "& img": {
+                objectFit: "contain",
+              },
+            }}
           />
           <Typography variant={"h5"}>{user?.name}</Typography>
           <Typography variant={"body1"} color="text.secondary">
@@ -72,7 +81,11 @@ const AuthUserDropdown = () => {
               <ListItemIcon sx={{ minWidth: 36 }}>
                 <EditOutlinedIcon />
               </ListItemIcon>
-              <ListItemText primary="Edit Profile" sx={{ my: 0 }} onClick={()=>navigate('/profile')}/>
+              <ListItemText
+                primary="Edit Profile"
+                sx={{ my: 0 }}
+                onClick={() => navigate("/profile")}
+              />
             </ListItemButton>
             <ListItemButton onClick={onLogout}>
               <ListItemIcon sx={{ minWidth: 36 }}>

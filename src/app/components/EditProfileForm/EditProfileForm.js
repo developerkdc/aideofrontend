@@ -41,7 +41,7 @@ const EditProfileForm = ({ user, onSave }) => {
   const onUserSave = async (data, { setSubmitting }) => {
     // console.log(data)
     let user_updated = await updateUserDetails(data);
-    console.log(user_updated);
+    // console.log(user_updated);
     if (user_updated?.success == true) {
       Swal.fire({
         position: "center",
@@ -98,7 +98,7 @@ const EditProfileForm = ({ user, onSave }) => {
               onFileSelection={(file) => {
                 setFieldValue("thumbnail", file);
               }}
-              src={`http://localhost:3001/${user?.thumbnail}`}
+              src={`https://aideo-backend.onrender.com/${user?.thumbnail}`}
               sx={{
                 width: 100,
                 height: 100,

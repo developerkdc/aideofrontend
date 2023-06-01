@@ -53,7 +53,7 @@ const Step1Form = ({ setValue }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("File paths:", data);
+        // console.log("File paths:", data);
         localStorage.setItem("thumbnail", data.imageFilePath);
         localStorage.setItem("zip", data.zipFilePath);
         // Handle the file paths in your frontend logic
@@ -81,7 +81,7 @@ const Step1Form = ({ setValue }) => {
     });
 
     for (var pair of formDataUpdated.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
+      // console.log(pair[0] + ", " + pair[1]);
     }
     // console.log(formData)
     if (formData.title && zipFiles.length > 0) {
@@ -240,7 +240,7 @@ const Step1Form = ({ setValue }) => {
                 getOptionLabel={(option) => option.name}
                 value={formData.language}
                 onChange={(event, value) => {
-                  console.log(value.name);
+                  // console.log(value.name);
                   setFormData({ ...formData, language: value });
                 }}
                 limitTags={1}

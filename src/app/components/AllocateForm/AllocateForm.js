@@ -31,7 +31,7 @@ const initialValues = {
 const AllocateForm = ({ content}) => {
   const Swal = useSwalWrapper();
   const dispatch = useDispatch();
-    console.log(content)
+    // console.log(content)
   const { user } = useSelector((state) => state.userReducer);
   useEffect(() => {
     dispatch(getAllUsers());

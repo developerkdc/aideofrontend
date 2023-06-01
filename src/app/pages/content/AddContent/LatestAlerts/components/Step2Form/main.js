@@ -12,7 +12,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import Div from "@jumbo/shared/Div/Div";
 
 const Step2Form = ({ formdata }) => {
-  console.log(formdata);
+  // console.log(formdata);
   const [storyboxCount, setStoryboxCount] = useState(1); // Initial number of textboxes
   const [audioboxCount, setAudioboxCount] = useState(1); // Initial number of textboxes
   const [visualboxCount, setVisualboxCount] = useState(1); // Initial number of textboxes

@@ -10,7 +10,7 @@ export const addUser = async (user) => {
     };
     const config = { headers: { "Content-Type": "application/json" } };
     const data = await axios.post("/api/v1/admin/register", user_data, config);
-    console.log(data)
+    // console.log(data)
     return data;
   } catch (error) {
     // console.log(data)

@@ -43,7 +43,7 @@ const UserForm = ({user, onSave}) => {
         else{
             user_updated = await addUser(data)
         }
-        console.log(user_updated)
+        // console.log(user_updated)
         if(user_updated?.status== 201){
             Swal.fire({
                 position: 'center',

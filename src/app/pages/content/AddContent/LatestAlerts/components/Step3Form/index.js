@@ -41,7 +41,7 @@ const Step3Form = () => {
 
       const data = JSON.parse(localStorage.getItem("formData"));
       const tagIds = data.tags.map((tag) => tag._id);
-      console.log(tagIds);
+      // console.log(tagIds);
       const formData = {
         title: data.title,
         zip: localStorage.getItem("zip"),

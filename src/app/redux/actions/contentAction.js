@@ -13,7 +13,7 @@ import axios from "axios";
 
 export const getAllContent = (item) => async (dispatch) => {
   let tagIds = item?.selectedTags?.map((tag)=> {return tag._id})
-  console.log(tagIds)
+  // console.log(tagIds)
   try {
     dispatch({ type: ALL_CONTENT_REQUEST });
     const data = await axios.get("/api/v1/content", {
@@ -77,7 +77,7 @@ export const getMyContentToVerify = () => async (dispatch) => {
 
 export const getContentByTags = (tags) => async (dispatch) => {
   try {
-    console.log(tags);
+    // console.log(tags);
     dispatch({ type: ALL_CONTENT_REQUEST });
     const config = { headers: { "Content-Type": "application/json" } };
     const data = await axios.post(
