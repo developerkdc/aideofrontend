@@ -113,7 +113,7 @@ const UserItem = ({ user }) => {
               >
                 <Avatar
                   alt={`${user.firstName} ${user.lastName}`}
-                  src={`http://localhost:3001/${user.thumbnail}`}
+                  src={`http://aideobe.kdcstaging.in/${user.thumbnail}`}
                   imgProps={{
                     style: {
                       objectFit: "contain",

@@ -36,7 +36,7 @@ export const ContentItem = ({ item, selected, onCheckboxChange }) => {
             height={105}
             style={{ verticalAlign: "middle",objectFit:"contain" }}
             alt={item?.title}
-            src={`http://localhost:3001/${item.thumbnail}`}
+            src={`http://aideobe.kdcstaging.in/${item.thumbnail}`}
           />
         </ListItemAvatar>
       </TableCell>
