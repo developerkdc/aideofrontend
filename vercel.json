@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/(.*)",
+        "destination": "https://aideo-backend.onrender.com/api/$1"
+      }
+    ]
+  }
+  

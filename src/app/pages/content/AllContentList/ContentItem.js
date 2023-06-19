@@ -34,9 +34,9 @@ export const ContentItem = ({ item, selected, onCheckboxChange }) => {
           <img
             width={140}
             height={105}
-            style={{ verticalAlign: "middle" }}
+            style={{ verticalAlign: "middle",objectFit:"contain" }}
             alt={item?.title}
-            src="../../images/colin-watts.jpg"
+            src={`http://localhost:3001/${item.thumbnail}`}
           />
         </ListItemAvatar>
       </TableCell>

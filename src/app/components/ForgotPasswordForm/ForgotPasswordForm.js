@@ -83,7 +83,7 @@ const ForgotPasswordForm = ({ user, onSave, hideDialogue }) => {
               variant="contained"
               size="large"
               sx={{ mb: 3 }}
-              // loading={isSubmitting || saveMutation.isLoading}
+              loading={isSubmitting}
             >
               Send Email
             </LoadingButton>

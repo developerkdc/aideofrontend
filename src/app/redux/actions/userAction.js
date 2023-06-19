@@ -1,3 +1,4 @@
+
 import {
   ALL_USERS_FAIL,
   ALL_USERS_REQUEST,
@@ -12,6 +13,7 @@ import {
   LOGOUT_FAIL,
   LOGOUT_SUCCESS,
 } from "app/utils/constants/userConstants";
+
 import axios from "axios";
 
 const setCookie = (cookieName, cookieValue, expirationDays) => {
@@ -34,11 +36,12 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     const config = { headers: { "Content-Type": "application/json" } };
     const data = await axios.post(
-      "/api/v1/users/login",
+      `/api/v1/users/login`,
       { email, password },
       config
     );
     dispatch({ type: LOGIN_SUCCESS, payload: data.data.user });
+
     sessionStorage.setItem("isAuthenticated", true);
     sessionStorage.setItem("role", data.data.user.role);
   } catch (error) {
@@ -46,6 +49,7 @@ export const login = (email, password) => async (dispatch) => {
     sessionStorage.setItem("isAuthenticated", false);
   }
 };
+
 
 export const loadUser = () => async (dispatch) => {
   try {

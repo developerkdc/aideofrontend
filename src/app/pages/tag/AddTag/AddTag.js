@@ -1,9 +1,16 @@
 import Div from "@jumbo/shared/Div/Div";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import TagForm from "app/components/TagForm/TagForm";
 import React from "react";
 
 export default function AddTag() {
+  const url =
+    "https://aideo-backend.onrender.com/controllers/Content/uploads/6475e981da9c9d8a017fb7b9";
+
+  const handlePlayer = () => {
+    console.log(url);
+    document.getElementById("player").contentWindow.setAideoIndexByUrl(url);
+  };
   return (
     <div>
       <Typography variant={"h2"} mb={3}>

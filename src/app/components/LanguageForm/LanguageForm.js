@@ -80,7 +80,7 @@ const LanguageForm = ({language, onSave}) => {
                             variant="contained"
                             size="large"
                             sx={{mb: 3}}
-                            // loading={isSubmitting || saveMutation.isLoading}
+                            loading={isSubmitting}
                         >Save</LoadingButton>
                     </Div>
                 </Form>
