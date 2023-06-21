@@ -41,7 +41,7 @@ const AuthUserDropdown = () => {
       <JumboDdPopover
         triggerButton={
           <Avatar
-            src={`https://aideo-backend.onrender.com/${user?.thumbnail}`}
+            src={`https://aideo.kdcstaging.in/${user?.thumbnail}`}
             sizes={"small"}
             sx={{ boxShadow: 25, cursor: "pointer" ,"& img": {
               objectFit: "contain",
@@ -58,7 +58,7 @@ const AuthUserDropdown = () => {
           }}
         >
           <Avatar
-            src={`https://aideo-backend.onrender.com/${user?.thumbnail}`}
+            src={`https://aideo.kdcstaging.in/${user?.thumbnail}`}
             alt={user?.name}
             sx={{
               width: 60,

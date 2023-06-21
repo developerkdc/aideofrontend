@@ -98,7 +98,7 @@ const EditProfileForm = ({ user, onSave }) => {
               onFileSelection={(file) => {
                 setFieldValue("thumbnail", file);
               }}
-              src={`https://aideo-backend.onrender.com/${user?.thumbnail}`}
+              src={`https://aideo.kdcstaging.in/${user?.thumbnail}`}
               sx={{
                 width: 100,
                 height: 100,
