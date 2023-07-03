@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import Div from "@jumbo/shared/Div/Div";
+import { BACKEND_URL } from "app/utils/constants/paths";
 
 const styles = {
   mediaPlayer: {
@@ -52,10 +53,16 @@ const styles = {
   },
 };
 
+let id;
+const url = `${BACKEND_URL}controllers/Content/uploads/`;
 const MediaPlayer = ({ data }) => {
+  let { contentData, _id } = data;
+  id = _id;
+  contentData = JSON.parse(contentData);
+  console.log(id);
   return (
     <div style={styles.mediaPlayer}>
-      <ImageOverlay data={data} />
+      <ImageOverlay data={contentData} />
     </div>
   );
 };
@@ -79,10 +86,7 @@ const VideoPlayer = ({ videoSource, audioSource }) => {
       )}
       {audioSource && (
         <audio autoPlay loop>
-          <source
-            src={require(`../../images/${audioSource}`)}
-            type="audio/mpeg"
-          />
+          <source src={`${url}/${audioSource}`} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
       )}
@@ -90,9 +94,9 @@ const VideoPlayer = ({ videoSource, audioSource }) => {
         <Div
           sx={{
             width: "400px",
-            height: "600px",
+            height: "750px",
             zIndex: -2,
-            backgroundColor: "white",
+            backgroundColor: "black",
           }}
         ></Div>
       )}
@@ -128,7 +132,7 @@ const ImageOverlay = ({ data }) => {
   const playImageAudio = () => {
     const audioSource = segments[currentImageIndex]?.Audio?.Source;
     if (audioSource) {
-      const audioElement = new Audio(require(`../../images/${audioSource}`));
+      const audioElement = new Audio(`${url}/${id}/${audioSource}`);
       audioRef.current = audioElement;
       audioElement.play();
     }
@@ -168,7 +172,7 @@ const ImageOverlay = ({ data }) => {
         margin: "0 2px",
         flex: `1 1 auto`,
         maxWidth: `calc(80% / ${images.length})`,
-        zIndex: 5
+        zIndex: 5,
       }}
     />
   ));
@@ -181,7 +185,7 @@ const ImageOverlay = ({ data }) => {
       <VideoPlayer
         videoSource={
           data?.Background?.Video?.Source
-            ? require(`../../images/${data.Background.Video.Source}`)
+            ? `${url}/${id}/${data.Background.Video.Source}`
             : null
         }
         audioSource={data?.Background?.Audio?.Source}
@@ -203,7 +207,7 @@ const ImageOverlay = ({ data }) => {
       <div style={styles.imageOverlay}>
         {isVideoSegment ? (
           <ReactPlayer
-            url={require(`../../images/${currentSegment.Video.Source}`)}
+            url={`${url}/${id}/${currentSegment.Video.Source}`}
             playing
             width="400px"
             height="auto"
@@ -212,7 +216,7 @@ const ImageOverlay = ({ data }) => {
         ) : (
           <img
             style={{ ...styles.overlayImage, background: "transparent" }}
-            src={require(`../../images/${images[currentImageIndex]?.Source}`)}
+            src={`${url}/${id}/${images[currentImageIndex]?.Source}`}
             alt={`Image ${currentImageIndex + 1}`}
           />
         )}
@@ -232,6 +236,5 @@ const ImageOverlay = ({ data }) => {
     </div>
   );
 };
-
 
 export default MediaPlayer;

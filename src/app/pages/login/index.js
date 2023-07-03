@@ -40,9 +40,11 @@ const validationSchema = yup.object({
 });
 
 const Login = ({ disableSmLogin }) => {
-  const { error, loading , isAuthenticated ,user} = useSelector((state) => state.userReducer);
+  const { error, loading, isAuthenticated, user } = useSelector(
+    (state) => state.userReducer
+  );
   const { setAuthToken } = useJumboAuth();
-  const {showDialog, hideDialog} = useJumboDialog();
+  const { showDialog, hideDialog } = useJumboDialog();
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -56,24 +58,23 @@ const Login = ({ disableSmLogin }) => {
       });
       dispatch(clearErrors());
     }
-    if(isAuthenticated && user.role=="admin"){
-        navigate("/content")
+    if (isAuthenticated && user.role == "admin") {
+      navigate("/content");
+    } else if (isAuthenticated && user.role != "admin") {
+      navigate("/mycontent");
     }
-    else if(isAuthenticated && user.role!="admin"){
-      navigate("/mycontent")
-    }
-  }, [dispatch, error ,isAuthenticated]);
+  }, [dispatch, error, isAuthenticated]);
 
   const onSignIn = (email, password) => {
     dispatch(login(email, password));
   };
 
-  const handleForgotPassword = () =>{
+  const handleForgotPassword = () => {
     showDialog({
-      title: 'Enter Email For Recovery',
-      content: <ForgotPasswordForm hideDialogue={hideDialog}/>
-  });
-  }
+      title: "Enter Email For Recovery",
+      content: <ForgotPasswordForm hideDialogue={hideDialog} />,
+    });
+  };
 
   return (
     <Div
@@ -81,7 +82,7 @@ const Login = ({ disableSmLogin }) => {
         width: 720,
         maxWidth: "100%",
         margin: "auto",
-        marginRight:80
+        // marginRight: 80,
         // p: 4,
       }}
     >
@@ -135,11 +136,11 @@ const Login = ({ disableSmLogin }) => {
               <Typography variant={"body1"} mb={2}>
                 By signing in, you can access the dashboard of Aideo.
               </Typography>
-              <Typography variant={"body1"}>
+              {/* <Typography variant={"body1"}>
                 <Link href={"#"} color={"inherit"} underline={"none"}>
                   Forgot your password? Recover Now
                 </Link>
-              </Typography>
+              </Typography> */}
             </Div>
 
             <Div sx={{ mt: "auto" }}>
@@ -194,10 +195,18 @@ const Login = ({ disableSmLogin }) => {
                 </LoadingButton>
                 {!disableSmLogin && (
                   <React.Fragment>
-                    <Typography variant={"body1"} mb={2} sx={{"&:hover":{cursor:"pointer"},width:"40%"}} onClick={handleForgotPassword}>
-                      Forgot Password
+                    <Typography
+                      variant={"body1"}
+                      mb={2}
+                      sx={{
+                        "&:hover": { cursor: "pointer", color: "blue" },
+                        width: "40%",
+                      }}
+                      onClick={handleForgotPassword}
+                    >
+                      Forgot Password?
                     </Typography>
-                    <Stack
+                    {/* <Stack
                       direction="row"
                       alignItems="center"
                       spacing={1}
@@ -245,7 +254,7 @@ const Login = ({ disableSmLogin }) => {
                       >
                         <Google fontSize="small" />
                       </IconButton>
-                    </Stack>
+                    </Stack> */}
                   </React.Fragment>
                 )}
               </Form>

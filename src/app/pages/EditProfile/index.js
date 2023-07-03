@@ -111,7 +111,7 @@ export default function EditProfile() {
           }}
           // action={<Chip size={"small"} label={"2 New"} color={"secondary"}/>}
         >
-          <EditProfileForm user={user}/>
+          <EditProfileForm user={user} />
           {/* <MediaPlayer data={data} /> */}
         </JumboCardQuick>
       </Div>

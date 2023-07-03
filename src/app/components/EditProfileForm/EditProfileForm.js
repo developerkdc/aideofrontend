@@ -14,6 +14,7 @@ import { addUser } from "app/services/apis/addUser";
 import { updateUserDetails } from "app/services/apis/updateUserDetails";
 import UpdatePasswordForm from "../UpdatePasswordForm/UpdatePassword";
 import { useJumboDialog } from "@jumbo/components/JumboDialog/hooks/useJumboDialog";
+import { BACKEND_URL } from "app/utils/constants/paths";
 
 const validationSchema = yup.object({
   name: yup.string("Enter your name").required("Name is required"),
@@ -98,7 +99,7 @@ const EditProfileForm = ({ user, onSave }) => {
               onFileSelection={(file) => {
                 setFieldValue("thumbnail", file);
               }}
-              src={`https://aideo.kdcstaging.in/${user?.thumbnail}`}
+              src={`${BACKEND_URL}${user?.thumbnail}`}
               sx={{
                 width: 100,
                 height: 100,

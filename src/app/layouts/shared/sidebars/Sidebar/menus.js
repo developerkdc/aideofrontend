@@ -145,6 +145,12 @@ const Menus = () => {
       type: "section",
       children: [
         {
+          uri: "/content",
+          label: "All Content",
+          type: "nav-item",
+          icon: <GraphicEqIcon sx={{ fontSize: 20 }} />,
+        },
+        {
           uri: "/mycontent",
           label: "My Content",
           type: "nav-item",

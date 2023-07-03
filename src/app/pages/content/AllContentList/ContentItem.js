@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   ListItemAvatar,
+  Modal,
   Stack,
   TableCell,
   TableRow,
@@ -12,13 +13,43 @@ import {
   Typography,
 } from "@mui/material";
 import ScheduleForm from "app/components/ScheduleForm/ScheduleForm";
-import React from "react";
+import MediaPlayer from "app/pages/MediaPlayer/MediaPlayer";
+import { BACKEND_URL } from "app/utils/constants/paths";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 export const ContentItem = ({ item, selected, onCheckboxChange }) => {
+  const { showDialog, hideDialog } = useJumboDialog();
+  const dispatch = useDispatch();
+
+  const hideDialogAndRefreshContactsList = React.useCallback(() => {
+    hideDialog();
+  }, [hideDialog]);
+
   const Item = styled(Span)(({ theme }) => ({
     padding: theme.spacing(0, 1),
   }));
+
+  const [showMediaPlayer, setShowMediaPlayer] = useState(false);
+
+  const handleViewClick = () => {
+    console.log(item);
+    setShowMediaPlayer(true);
+    showDialog({
+      title: "",
+      content: <MediaPlayer data={item} />,
+    });
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <TableRow sx={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}>
@@ -34,9 +65,9 @@ export const ContentItem = ({ item, selected, onCheckboxChange }) => {
           <img
             width={140}
             height={105}
-            style={{ verticalAlign: "middle",objectFit:"contain" }}
+            style={{ verticalAlign: "middle", objectFit: "contain" }}
             alt={item?.title}
-            src={`http://aideobe.kdcstaging.in/${item.thumbnail}`}
+            src={`${BACKEND_URL}${item.thumbnail}`}
           />
         </ListItemAvatar>
       </TableCell>
@@ -290,6 +321,46 @@ export const ContentItem = ({ item, selected, onCheckboxChange }) => {
               </Typography>
             </Tooltip>
           </Item>
+        </Stack>
+      </TableCell>
+
+      <TableCell width={100} sx={{ p: 0, textAlign: "center" }}>
+        <Stack
+          spacing={1}
+          direction={"column"}
+          alignItems={"center"}
+          sx={{ maxWidth: 100, minWidth: 100 }}
+        >
+          {/* <div>
+            <Button onClick={handleViewClick}>View</Button>
+          </div> */}
+          <div>
+            <Button variant="text" onClick={handleOpen}>
+              View
+            </Button>
+            <Modal open={open} onClose={handleClose}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                  backgroundColor: "#fff",
+                  padding: "24px",
+                }}
+              >
+                <MediaPlayer data={item} />
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleClose}
+                  sx={{ position: "absolute", top: 10, right: 10 }}
+                >
+                  Close
+                </Button>
+              </div>
+            </Modal>
+          </div>
         </Stack>
       </TableCell>
     </TableRow>

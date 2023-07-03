@@ -48,7 +48,6 @@ const AllContentList = () => {
     dispatch(getAllTags());
   }, []);
 
-
   // Dummy data
   const { allContent } = useSelector((state) => state.contentReducer);
   let { allUsers } = useSelector((state) => state.userReducer);
@@ -149,10 +148,10 @@ const AllContentList = () => {
 
   // Update form values
   const updateFormValues = (name, value) => {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        [name]: value,
-      }));
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
   };
 
   useEffect(() => {
@@ -166,18 +165,18 @@ const AllContentList = () => {
   };
 
   return (
-    <Card>
+    <Card sx={{ overflow: "scroll" }}>
       <Stack spacing={2} p={2}>
         <Typography variant="h2">Aideo List</Typography>
-        <Div
+        <TableRow
           sx={{
             display: "flex",
-            width: "100%",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 3,
           }}
         >
-          <Box sx={{ width: "14%" }}>
+          <Box sx={{ minWidth: "150px" }}>
             <InputBase
               sx={{
                 color: "inherit",
@@ -199,8 +198,9 @@ const AllContentList = () => {
               value={searchKeyword}
             />
           </Box>
-          <Box sx={{ width: "10%", ml: -5 }}>
+          <Box sx={{ minWidth: "150px", ml: -5 }}>
             <Autocomplete
+              fullWidth
               multiple={false}
               id="user-standard"
               options={allUsers}
@@ -229,7 +229,7 @@ const AllContentList = () => {
               )}
             />
           </Box>
-          <Box sx={{ width: "19%" }}>
+          <Box sx={{ minWidth: "150px" }}>
             <Autocomplete
               multiple
               id="tags-standard"
@@ -276,7 +276,7 @@ const AllContentList = () => {
               )}
             />
           </Box>
-          <Box sx={{ width: "7%", mt: 2 }}>
+          <Box sx={{ minWidth: "150px", mt: 2 }}>
             <Autocomplete
               multiple={false}
               id="ageRating-standard"
@@ -307,7 +307,7 @@ const AllContentList = () => {
               )}
             />
           </Box>
-          <Box sx={{ width: "6%", mt: 2 }}>
+          <Box sx={{ minWidth: "150px", mt: 2 }}>
             <Autocomplete
               multiple={false}
               id="status-standard"
@@ -338,7 +338,7 @@ const AllContentList = () => {
               )}
             />
           </Box>
-          <Box sx={{ width: "10%", mt: 2 }}>
+          <Box sx={{ minWidth: "150px", mt: 2 }}>
             <TextField
               id="date"
               type="date"
@@ -350,7 +350,7 @@ const AllContentList = () => {
                 shrink: true,
               }}
               sx={{
-                width: "150px",
+                // width: "150px",
                 "& input": {
                   fontSize: "12px",
                   padding: "8px",
@@ -358,7 +358,7 @@ const AllContentList = () => {
               }}
             />
           </Box>
-          <Box sx={{ width: "10%", mt: 2 }}>
+          <Box sx={{ minWidth: "150px", mt: 2 }}>
             <TextField
               id="date"
               type="date"
@@ -370,7 +370,7 @@ const AllContentList = () => {
                 shrink: true,
               }}
               sx={{
-                width: "150px",
+                // width: "150px",
                 "& input": {
                   fontSize: "12px",
                   padding: "8px",
@@ -378,7 +378,7 @@ const AllContentList = () => {
               }}
             />
           </Box>
-        </Div>
+        </TableRow>
         {currentItems.map((item) => (
           <ContentItem
             key={item._id}

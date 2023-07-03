@@ -21,6 +21,7 @@ import useJumboTheme from "@jumbo/hooks/useJumboTheme";
 import useJumboAuth from "@jumbo/hooks/useJumboAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "app/redux/actions/userAction";
+import { BACKEND_URL } from "app/utils/constants/paths";
 
 const AuthUserDropdown = () => {
   const dispatch = useDispatch();
@@ -41,11 +42,15 @@ const AuthUserDropdown = () => {
       <JumboDdPopover
         triggerButton={
           <Avatar
-            src={`https://aideo.kdcstaging.in/${user?.thumbnail}`}
+            src={`${BACKEND_URL}${user?.thumbnail}`}
             sizes={"small"}
-            sx={{ boxShadow: 25, cursor: "pointer" ,"& img": {
-              objectFit: "contain",
-            },}}
+            sx={{
+              boxShadow: 25,
+              cursor: "pointer",
+              "& img": {
+                objectFit: "contain",
+              },
+            }}
           />
         }
       >
@@ -58,7 +63,7 @@ const AuthUserDropdown = () => {
           }}
         >
           <Avatar
-            src={`https://aideo.kdcstaging.in/${user?.thumbnail}`}
+            src={`${BACKEND_URL}/${user?.thumbnail}`}
             alt={user?.name}
             sx={{
               width: 60,
