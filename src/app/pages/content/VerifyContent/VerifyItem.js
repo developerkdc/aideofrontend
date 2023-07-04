@@ -6,6 +6,7 @@ import {
   Button,
   Checkbox,
   ListItemAvatar,
+  Modal,
   Stack,
   TableCell,
   TableRow,
@@ -13,15 +14,25 @@ import {
   Typography,
 } from "@mui/material";
 import AllocateForm from "app/components/AllocateForm/AllocateForm";
+import MediaPlayer from "app/pages/MediaPlayer/MediaPlayer";
 import { getMyContentToVerify } from "app/redux/actions/contentAction";
 import { verifyBulk } from "app/services/apis/verifyBulk";
-import React from "react";
+import { BACKEND_URL } from "app/utils/constants/paths";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
 export const VerifyItem = ({ item, selected, onCheckboxChange }) => {
   const { showDialog, hideDialog } = useJumboDialog();
+  const [open, setOpen] = useState(false);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const hideDialogAndRefreshContactsList = React.useCallback(() => {
     hideDialog();
   }, [hideDialog]);
@@ -41,12 +52,17 @@ export const VerifyItem = ({ item, selected, onCheckboxChange }) => {
     dispatch(getMyContentToVerify());
   };
 
-  const handleAllocate = () =>{
+  const handleAllocate = () => {
     showDialog({
-      title: 'Update User details',
-      content: <AllocateForm content={item} onSave={hideDialogAndRefreshContactsList}/>
-  });
-  }
+      title: "Update User details",
+      content: (
+        <AllocateForm
+          content={item}
+          onSave={hideDialogAndRefreshContactsList}
+        />
+      ),
+    });
+  };
 
   return (
     <TableRow sx={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}>
@@ -62,9 +78,9 @@ export const VerifyItem = ({ item, selected, onCheckboxChange }) => {
           <img
             width={140}
             height={105}
-            style={{ verticalAlign: "middle" }}
+            style={{ verticalAlign: "middle", objectFit: "contain" }}
             alt={item.title}
-            src="../../images/colin-watts.jpg"
+            src={`${BACKEND_URL}${item.thumbnail}`}
           />
         </ListItemAvatar>
       </TableCell>
@@ -377,6 +393,45 @@ export const VerifyItem = ({ item, selected, onCheckboxChange }) => {
             Allocate
           </Button>
         )}
+      </TableCell>
+      <TableCell width={100} sx={{ p: 0, textAlign: "center" }}>
+        <Stack
+          spacing={1}
+          direction={"column"}
+          alignItems={"center"}
+          sx={{ maxWidth: 100, minWidth: 100 }}
+        >
+          {/* <div>
+            <Button onClick={handleViewClick}>View</Button>
+          </div> */}
+          <div>
+            <Button variant="contained" onClick={handleOpen}>
+              View
+            </Button>
+            <Modal open={open} onClose={handleClose}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                  backgroundColor: "#fff",
+                  padding: "24px",
+                }}
+              >
+                <MediaPlayer data={item} />
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleClose}
+                  sx={{ position: "absolute", top: 10, right: 10 }}
+                >
+                  Close
+                </Button>
+              </div>
+            </Modal>
+          </div>
+        </Stack>
       </TableCell>
     </TableRow>
   );

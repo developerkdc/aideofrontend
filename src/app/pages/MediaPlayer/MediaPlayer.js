@@ -56,10 +56,10 @@ const styles = {
 let id;
 const url = `${BACKEND_URL}controllers/Content/uploads/`;
 const MediaPlayer = ({ data }) => {
+  console.log(data);
   let { contentData, _id } = data;
   id = _id;
   contentData = JSON.parse(contentData);
-  console.log(id);
   return (
     <div style={styles.mediaPlayer}>
       <ImageOverlay data={contentData} />
@@ -86,7 +86,7 @@ const VideoPlayer = ({ videoSource, audioSource }) => {
       )}
       {audioSource && (
         <audio autoPlay loop>
-          <source src={`${url}/${audioSource}`} type="audio/mpeg" />
+          <source src={`${url}${id}/${audioSource}`} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
       )}

@@ -335,7 +335,7 @@ export const ContentItem = ({ item, selected, onCheckboxChange }) => {
             <Button onClick={handleViewClick}>View</Button>
           </div> */}
           <div>
-            <Button variant="text" onClick={handleOpen}>
+            <Button variant="contained" onClick={handleOpen}>
               View
             </Button>
             <Modal open={open} onClose={handleClose}>
