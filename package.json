@@ -115,6 +115,5 @@
   "devDependencies": {
     "redux-devtools-extension": "^2.13.9"
   },
-  "packageManager": "yarn@1.22.5",
-  "proxy": "http://localhost:3001/"
+  "packageManager": "yarn@1.22.5"
 }
